@@ -19,8 +19,8 @@ typedef struct detector_t
    RainIntensity_t last_intensity = RainIntensity_NoRain;
    double confidence = 0;
       
-   double hp_dly[MWSPT_NSEC][2] = {0};
-   double lp_dly[][2] = {0};
+   double hp_dly[hp_MWSPT_NSEC][2] = {0};
+   double lp_dly[lp_MWSPT_NSEC][2] = {0};
       
    /* TODO: Implement heuristic to pause between
             large gaps in rain. */
