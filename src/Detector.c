@@ -22,8 +22,8 @@ typedef struct detector_t
    double hp_dly[hp_MWSPT_NSEC][2] = {0};
    double lp_dly[lp_MWSPT_NSEC][2] = {0};
       
-   /* TODO: Implement heuristic to pause between
-            large gaps in rain. */
+   unsigned int sleep_mask = 0;
+   unsigned int counter = 0;
 };
 
 /* Algorithm Parameters */
@@ -81,8 +81,6 @@ RainIntensity_t DTDoDetection(ptr_detector_t detector,
 {
    double corr_sum = 0;
    RainIntensity_t retval = RainIntensity_NoRain;
-   static int sleep_mask = 1;
-   static int counter = 0;
    size_t i;
    size_t j;
    fft_tmp[DTChunkSize];
@@ -91,8 +89,8 @@ RainIntensity_t DTDoDetection(ptr_detector_t detector,
    /* The heuristic's implementation here is functionally equivalent
       to that found in the report, but is optimized to avoid checking 
       and incrementing the counter on each call */
-   ++counter;
-   if (counter < sleep_mask) {
+   ++(detector->counter);
+   if (detector->counter < detector->sleep_mask) {
       return detector->last_intensity;
    }
    
@@ -134,17 +132,17 @@ RainIntensity_t DTDoDetection(ptr_detector_t detector,
    /* Compute the thresholded values */
    if (detector->confidence > raining_max) {
       retval = RainIntensity_SomeRain;
-      sleep_mask = 1;
-      counter = 0;
+      detector->sleep_mask = 1;
+      detector->counter = 0;
       if (detector->confidence > confidence_max) {
          detector->confidence = confidence_max;
       }
    } else {
       if (detector->confidence < raining_min) {        
          if (detector->confidence < confidence_min) {
-            sleep_mask<<=1;
-            if (sleep_mask > 64) {
-               sleep_mask = 64;
+            detector->sleep_mask<<=1;
+            if (detector->sleep_mask > 64) {
+               detector->sleep_mask = 64;
             }
             
             confidence = confidence_min;
@@ -154,8 +152,8 @@ RainIntensity_t DTDoDetection(ptr_detector_t detector,
       }
    }
 
-   if (counter == 64) {
-      counter = 0;
+   if (detector->counter == 64) {
+      detector->counter = 0;
    }
    detector->last_intensity = retval;
    return retval;
