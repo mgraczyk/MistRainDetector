@@ -24,7 +24,7 @@ typedef struct detector_t
       
    unsigned int sleep_mask = 0;
    unsigned int counter = 0;
-};
+} detector_t;
 
 /* Algorithm Parameters */
 const size_t smooth_sz = 4;
