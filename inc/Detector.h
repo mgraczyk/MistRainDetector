@@ -28,7 +28,8 @@
 */
 
 /* Opaque Detector object type */
-typedef void* ptr_detector_t;
+struct detector_t;
+typedef detector_t* ptr_detector_t;
 
 typedef double audio_value_t;
 
