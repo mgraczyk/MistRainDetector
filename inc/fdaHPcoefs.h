@@ -13,15 +13,9 @@
  * Linear Phase        : No
  */
 
-/* General type conversion for MATLAB generated C-code  */
-#include "tmwtypes.h"
-/* 
- * Expected path to tmwtypes.h 
- * C:\Program Files\MATLAB\R2013a\extern\include\tmwtypes.h 
- */
 #define hp_MWSPT_NSEC 13
 const int hp_NL[hp_MWSPT_NSEC] = { 1,3,1,3,1,3,1,3,1,3,1,3,1 };
-const real64_T hp_NUM[hp_MWSPT_NSEC][3] = {
+const double hp_NUM[hp_MWSPT_NSEC][3] = {
   {
      0.7939283828909,                 0,                 0 
   },
